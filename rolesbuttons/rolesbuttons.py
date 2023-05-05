@@ -120,14 +120,14 @@ class RolesButtons(Cog):
             except discord.HTTPException:
                 await interaction.followup.send(
                     _(
-                        "I could not remove the role {role.mention} ({role.id}) role from you. Please notify an administrator of this server."
+                        "I could not remove the {role.mention} role from you. Please notify an administrator of this server."
                     ).format(role=role),
                     ephemeral=True,
                 )
                 return
             else:
                 await interaction.followup.send(
-                    _("You no longer have the role {role.mention} ({role.id}).").format(role=role),
+                    _("You no longer have the {role.mention} role.").format(role=role),
                     ephemeral=True,
                 )
         if mode == "replace":
@@ -136,7 +136,7 @@ class RolesButtons(Cog):
                     continue
                 other_role_id = config[f"{interaction.channel.id}-{interaction.message.id}"][emoji]["role"]
                 other_role = interaction.guild.get_role(other_role_id)
-                if other_role is None or other_role not in interaction.user.roles:
+                if not other_role or other_role not in interaction.user.roles:
                     continue
                 try:
                     await interaction.user.remove_roles(
